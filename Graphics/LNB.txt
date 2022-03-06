@@ -1,0 +1,547 @@
+Line Drawing DDA:
+
+def DDALine(x1, y1, x2, y2):
+    dx = x2 - x1
+    dy = y2 - y1
+    steps = 0
+    # Slope judgment
+    if abs(dx) > abs(dy):
+        steps = abs(dx)
+    else:
+        steps = abs(dy)
+         # There must be one equal to 1, and one less than 1
+    delta_x = float(dx / steps)
+    delta_y = float(dy / steps)
+         # Round off to ensure that the increment of x and y is less than or equal to 1, so that the generated straight line is as uniform as possible
+    x = x1 + 0.5
+    y = y1 + 0.5
+    for i in range(0, int(steps + 1)):
+        print(int(x), int(y))
+        x += delta_x
+        y += delta_y
+
+def main():
+    x = 0
+    y = 0
+    xEnd = 10
+    yEnd = -5
+    DDALine(x, y, xEnd, yEnd)
+
+if __name__ == '__main__':
+    main()
+
+I/O:
+
+0 0
+1 0
+2 0
+3 -1
+4 -1
+5 -2
+6 -2
+7 -3
+8 -3
+9 -4
+10 -4
+
+Line Drawing Bressenham:
+
+def bresenham(x0, y0, x1, y1):
+
+    dx = x1 - x0
+    dy = y1 - y0
+
+    xsign = 1 if dx > 0 else -1
+    ysign = 1 if dy > 0 else -1
+
+    dx = abs(dx)
+    dy = abs(dy)
+
+    if dx > dy:
+        xx, xy, yx, yy = xsign, 0, 0, ysign
+    else:
+        dx, dy = dy, dx
+        xx, xy, yx, yy = 0, ysign, xsign, 0
+
+    D = 2*dy - dx
+    y = 0
+
+    for x in range(dx + 1):
+        print(x0 + x*xx + y*yx, y0 + x*xy + y*yy)
+        if D >= 0:
+            y += 1
+            D -= 2*dx
+        D += 2*dy
+
+bresenham(3,2,-15,10)
+
+I/O:
+
+3 2
+2 2
+1 3
+0 3
+-1 4
+-2 4
+-3 5
+-4 5
+-5 6
+-6 6
+-7 6
+-8 7
+-9 7
+-10 8
+-11 8
+-12 9
+-13 9
+-14 10
+-15 10
+
+Circle Drawing Mid-Point:
+
+import matplotlib.pyplot as plt
+
+def midPointCircleDraw(x_centre, y_centre, r):
+    px=[]
+    py=[]
+    x = r
+    y = 0
+      
+
+    print("(", x + x_centre, ", ", 
+               y + y_centre, ")", 
+               sep = "", end = "") 
+      
+
+    if (r > 0) :
+      
+        print("(", x + x_centre, ", ",
+                  -y + y_centre, ")", 
+                  sep = "", end = "")
+
+        print("(", y + x_centre, ", ", 
+                   x + y_centre, ")",
+                   sep = "", end = "")
+
+        print("(", -y + x_centre, ", ", 
+                    x + y_centre, ")", sep = "") 
+      
+    # Initialising the value of P 
+    P = 1 - r 
+  
+    while x > y:
+      
+        y += 1
+          
+        # Mid-point inside or on the perimeter
+        if P <= 0: 
+            P = P + 2 * y + 1
+              
+        # Mid-point outside the perimeter 
+        else:         
+            x -= 1
+            P = P + 2 * y - 2 * x + 1
+          
+        # All the perimeter points have 
+        # already been printed 
+        if (x < y):
+            break
+          
+
+        print("(", x + x_centre, ", ", y + y_centre,
+                            ")", sep = "", end = "")
+        # plt.scatter(x+x_centre, y+y_centre)
+        px.append(x+x_centre)
+        py.append(y+y_centre)
+        print("(", -x + x_centre, ", ", y + y_centre, 
+                             ")", sep = "", end = "") 
+        # plt.scatter(-x+x_centre,y + y_centre)
+        px.append(-x+x_centre)
+        py.append(y+y_centre)
+        print("(", x + x_centre, ", ", -y + y_centre,
+                             ")", sep = "", end = "")
+        # plt.scatter(x+x_centre,-y+y_centre)
+        px.append(x+x_centre)
+        py.append(-y+y_centre)
+        print("(", -x + x_centre, ", ", -y + y_centre,
+                                        ")", sep = "")
+        # plt.scatter(-x+x_centre,-y+y_centre)
+        px.append(-x+x_centre)
+        py.append(-y+y_centre)
+          
+
+        if x != y:
+          
+            print("(", y + x_centre, ", ", x + y_centre, 
+                                ")", sep = "", end = "")
+            px.append(y+x_centre)
+            py.append(x+y_centre)
+            print("(", -y + x_centre, ", ", x + y_centre,
+                                 ")", sep = "", end = "")
+            px.append(-y+x_centre)
+            py.append(x+y_centre)
+            print("(", y + x_centre, ", ", -x + y_centre,
+                                 ")", sep = "", end = "") 
+            px.append(y+x_centre)
+            py.append(-x+y_centre)
+            print("(", -y + x_centre, ", ", -x + y_centre, 
+                                            ")", sep = "")
+            px.append(-y+x_centre)
+            py.append(-x+y_centre)
+        
+    plt.scatter(px, py)
+    # plt.show()
+        
+                              
+# Driver Code
+if __name__ == '__main__':
+      
+    # To draw a circle of radius 4
+    # centred at (0, 0) 
+    midPointCircleDraw(0, 0, 4)
+
+I/O:
+
+(4, 0)(4, 0)(0, 4)(0, 4)
+(4, 1)(-4, 1)(4, -1)(-4, -1)
+(1, 4)(-1, 4)(1, -4)(-1, -4)
+(4, 2)(-4, 2)(4, -2)(-4, -2)
+(2, 4)(-2, 4)(2, -4)(-2, -4)
+(3, 3)(-3, 3)(3, -3)(-3, -3)
+
+Ellipse Drawing Mid-Point:
+
+import matplotlib.pyplot as plt
+def midptellipse(rx, ry, xc, yc):
+    px=[]
+    py=[]
+    x = 0
+    y = ry
+
+    # Initial decision parameter of region 1
+    d1 = ((ry * ry) - (rx * rx * ry) +
+                    (0.25 * rx * rx))
+    dx = 2 * ry * ry * x
+    dy = 2 * rx * rx * y
+
+    # For region 1
+    while (dx < dy):
+
+        # Print points based on 4-way symmetry
+        print("(", x + xc, ",", y + yc, ")")
+        px.append(x+xc)
+        py.append(y+yc)
+        print("(",-x + xc,",", y + yc, ")")
+        px.append(-x+xc)
+        py.append(y+yc)
+        print("(",x + xc,",", -y + yc ,")")
+        px.append(x+xc)
+        py.append(-y+yc)
+        print("(",-x + xc, ",", -y + yc, ")")
+        px.append(-x+xc)
+        py.append(-y+yc)
+
+        # Checking and updating value of
+        # decision parameter based on algorithm
+        if (d1 < 0):
+            x += 1
+            dx = dx + (2 * ry * ry)
+            d1 = d1 + dx + (ry * ry)
+        else:
+            x += 1
+            y -= 1
+            dx = dx + (2 * ry * ry)
+            dy = dy - (2 * rx * rx)
+            d1 = d1 + dx - dy + (ry * ry)
+
+    # Decision parameter of region 2
+    d2 = (((ry * ry) * ((x + 0.5) * (x + 0.5))) +
+        ((rx * rx) * ((y - 1) * (y - 1))) -
+        (rx * rx * ry * ry))
+
+    # Plotting points of region 2
+    while (y >= 0):
+
+        # printing points based on 4-way symmetry
+        print("(", x + xc, ",", y + yc, ")")
+        px.append(x+xc)
+        py.append(y+yc)
+        print("(", -x + xc, ",", y + yc, ")")
+        px.append(-x+xc)
+        py.append(y+yc)
+        print("(", x + xc, ",", -y + yc, ")")
+        px.append(x+xc)
+        py.append(-y+yc)
+        print("(", -x + xc, ",", -y + yc, ")")
+        px.append(-x+xc)
+        py.append(-y+yc)
+
+        # Checking and updating parameter
+        # value based on algorithm
+        if (d2 > 0):
+            y -= 1;
+            dy = dy - (2 * rx * rx)
+            d2 = d2 + (rx * rx) - dy
+
+        else:
+            y -= 1
+            x += 1
+            dx = dx + (2 * ry * ry)
+            dy = dy - (2 * rx * rx)
+            d2 = d2 + dx - dy + (rx * rx)
+    # plt.figure(figsize=(10,15))
+    # plt.scatter(px,py)
+    # plt.show()
+
+midptellipse(4, 7, 0, 0)
+
+I/O:
+( 0 , 7 )
+( 0 , 7 )
+( 0 , -7 )
+( 0 , -7 )
+( 1 , 7 )
+( -1 , 7 )
+( 1 , -7 )
+( -1 , -7 )
+( 2 , 6 )
+( -2 , 6 )
+( 2 , -6 )
+( -2 , -6 )
+( 3 , 5 )
+( -3 , 5 )
+( 3 , -5 )
+( -3 , -5 )
+( 3 , 4 )
+( -3 , 4 )
+( 3 , -4 )
+( -3 , -4 )
+( 4 , 3 )
+( -4 , 3 )
+( 4 , -3 )
+( -4 , -3 )
+( 4 , 2 )
+( -4 , 2 )
+( 4 , -2 )
+( -4 , -2 )
+( 4 , 1 )
+( -4 , 1 )
+( 4 , -1 )
+( -4 , -1 )
+( 4 , 0 )
+( -4 , 0 )
+( 4 , 0 )
+( -4 , 0 )
+
+Transformations in 2D:
+
+import math
+import numpy as np
+
+n = int(input("Enter the numnber of vertices of the figure: "))
+x_points = [0]*n
+y_points = [0]*n
+
+for i in range(0, n):
+    x_points[i] = int(
+        input("Enter the x co-ordinate of point " + str(i+1)+": "))
+    y_points[i] = int(
+        input("Enter the y co-ordinate of point " + str(i+1)+": "))
+    print()
+
+
+def translation(n, x_points, y_points):
+
+    tx = int(input("Enter the x co-ordinate of the translation vector pair: "))
+    ty = int(input("Enter the y co-ordinate of the translation vector pair: "))
+    trans_x_points = [0]*n
+    trans_y_points = [0]*n
+
+    for i in range(0, n):
+        trans_x_points[i] = x_points[i] + tx
+        trans_y_points[i] = y_points[i] + ty
+
+    for i in range(0, n):
+        print("The translated co-ordinates of point " + str(i+1) +
+              " are: (" + str(trans_x_points[i]) + "," + str(trans_y_points[i]) + ")")
+        print()
+
+
+def rotation(n, x_points, y_points):
+
+    t = int(
+        input("Enter the angle(in degrees) through which the figure will be rotated: "))
+    rad_t = math.radians(t)
+    rotation_x_points = [0]*n
+    rotation_y_points = [0]*n
+
+    for i in range(0, n):
+        rotation_x_points[i] = round(
+            x_points[i]*math.cos(rad_t) - y_points[i]*math.sin(rad_t))
+        rotation_y_points[i] = round(
+            x_points[i]*math.sin(rad_t) + y_points[i]*math.cos(rad_t))
+
+    for i in range(0, n):
+        print("The rotated co-ordinates of point " + str(i+1) + " are: (" +
+              str(rotation_x_points[i]) + "," + str(rotation_y_points[i]) + ")")
+        print()
+
+
+def scaling(n, x_points, y_points):
+
+    tx = float(input("Enter the x axis scale object: "))
+    ty = float(input("Enter the y axis scale object: "))
+    scale_x_points = [0]*n
+    scale_y_points = [0]*n
+
+    for i in range(0, n):
+        scale_x_points[i] = round(x_points[i]*tx)
+        scale_y_points[i] = round(y_points[i]*ty)
+
+    for i in range(0, n):
+        print("The scaled co-ordinates of point " + str(i+1) + " are: (" +
+              str(scale_x_points[i]) + "," + str(scale_y_points[i]) + ")")
+        print()
+
+
+def reflection(n, x_points, y_points):
+
+    t = int(input("Enter the angle(in degrees) of inclination of the line through which the point will be reflected: "))
+    y = int(input("Enter the y-intercept: "))
+    rad_2t = math.radians(2*t)
+    reflec_mat = np.zeros((3, 3), dtype=np.double)
+    reflec_mat[0][0] = math.cos(rad_2t)
+    reflec_mat[0][1] = math.sin(rad_2t)
+    reflec_mat[0][2] = math.sin(rad_2t)*(-y)
+    reflec_mat[1][0] = math.sin(rad_2t)
+    reflec_mat[1][1] = -math.cos(rad_2t)
+    reflec_mat[1][2] = (math.cos(rad_2t)+1)*y
+    reflec_mat[2][0] = 0
+    reflec_mat[2][1] = 0
+    reflec_mat[2][2] = 1
+
+    p = np.zeros((3, n), dtype=np.double)
+    for i in range(0, n):
+        p[0][i] = x_points[i]
+        p[1][i] = y_points[i]
+        p[2][i] = 1
+
+    p1 = np.zeros((3, n), dtype=np.double)
+    for i in range(0, 3):
+        for j in range(0, n):
+            p1[i][j] = 0
+            for k in range(0, 3):
+                p1[i][j] += reflec_mat[i][k] * p[k][j]
+
+    reflec_x_points = [0]*n
+    reflec_y_points = [0]*n
+
+    for i in range(0, n):
+        reflec_x_points[i] = round(p1[0][i])
+        reflec_y_points[i] = round(p1[1][i])
+
+    for i in range(0, n):
+        print("The reflected co-ordinates of point " + str(i+1) + " are: (" +
+              str(reflec_x_points[i]) + "," + str(reflec_y_points[i]) + ")")
+        print()
+
+
+def shearing(n, x_points, y_points):
+
+    shx = float(input("Enter the shearing value for the x co-ordinate: "))
+    shy = float(input("Enter the shearing value for the y co-ordinate: "))
+    shear_x_points = [0]*n
+    shear_y_points = [0]*n
+
+    for i in range(0, n):
+        shear_x_points[i] = round(x_points[i] + y_points[i]*shx)
+        shear_y_points[i] = round(y_points[i] + x_points[i]*shy)
+
+    for i in range(0, n):
+        print("The sheared co-ordinates of point " + str(i+1) + " are: (" +
+              str(shear_x_points[i]) + "," + str(shear_y_points[i]) + ")")
+        print()
+
+
+translation(n, x_points, y_points)
+rotation(n, x_points, y_points)
+scaling(n, x_points, y_points)
+reflection(n, x_points, y_points)
+shearing(n, x_points, y_points)
+
+I/O:
+
+Enter the numnber of vertices of the figure: 5
+Enter the x co-ordinate of point 1: 1
+Enter the y co-ordinate of point 1: 2
+
+Enter the x co-ordinate of point 2: 3
+Enter the y co-ordinate of point 2: 4
+
+Enter the x co-ordinate of point 3: 5
+Enter the y co-ordinate of point 3: 6
+
+Enter the x co-ordinate of point 4: 7
+Enter the y co-ordinate of point 4: 8
+
+Enter the x co-ordinate of point 5: 9
+Enter the y co-ordinate of point 5: 0
+
+Enter the x co-ordinate of the translation vector pair: 2
+Enter the y co-ordinate of the translation vector pair: 3
+The translated co-ordinates of point 1 are: (3,5)
+
+The translated co-ordinates of point 2 are: (5,7)
+
+The translated co-ordinates of point 3 are: (7,9)
+
+The translated co-ordinates of point 4 are: (9,11)
+
+The translated co-ordinates of point 5 are: (11,3)
+
+Enter the angle(in degrees) through which the figure will be rotated: 45
+The rotated co-ordinates of point 1 are: (-1,2)
+
+The rotated co-ordinates of point 2 are: (-1,5)
+
+The rotated co-ordinates of point 3 are: (-1,8)
+
+The rotated co-ordinates of point 4 are: (-1,11)
+
+The rotated co-ordinates of point 5 are: (6,6)
+
+Enter the x axis scale object: 2
+Enter the y axis scale object: 1.3
+The scaled co-ordinates of point 1 are: (2,3)
+
+The scaled co-ordinates of point 2 are: (6,5)
+
+The scaled co-ordinates of point 3 are: (10,8)
+
+The scaled co-ordinates of point 4 are: (14,10)
+
+The scaled co-ordinates of point 5 are: (18,0)
+
+Enter the angle(in degrees) of inclination of the line through which the point will be reflected: 90
+Enter the y-intercept: 0 
+The reflected co-ordinates of point 1 are: (-1,2)
+
+The reflected co-ordinates of point 2 are: (-3,4)
+
+The reflected co-ordinates of point 3 are: (-5,6)
+
+The reflected co-ordinates of point 4 are: (-7,8)
+
+The reflected co-ordinates of point 5 are: (-9,0)
+
+Enter the shearing value for the x co-ordinate: 3 
+Enter the shearing value for the y co-ordinate: 4
+The sheared co-ordinates of point 1 are: (7,6)
+
+The sheared co-ordinates of point 2 are: (15,16)
+
+The sheared co-ordinates of point 3 are: (23,26)
+
+The sheared co-ordinates of point 4 are: (31,36)
+
+The sheared co-ordinates of point 5 are: (9,36)
